@@ -1,0 +1,133 @@
+; ==========================================
+; INTERPRETER FOR "MINILANG" RUNNING ON CCPU
+; ==========================================
+
+; --- 1. BOOTLOADER: Nahranie MiniLang Bytecodu do pamäte ---
+; Bytecode reprezentuje tento MiniLang program:
+; SET a = 0
+; SET b = 5
+; WHILE b:
+;     ADD a, b
+;     DEC b
+; END
+; HLT
+
+; Opcodes: 0=HLT, 1=SET, 2=ADD, 3=DEC, 4=JMP, 5=JZ
+
+; SET a = 0 (Opcode 1, premenná 'a' má index 0, hodnota 0)
+PUT 1 -> m100
+PUT 0 -> m101
+PUT 0 -> m102
+
+; SET b = 5 (Opcode 1, premenná 'b' má index 1, hodnota 5)
+PUT 1 -> m103
+PUT 1 -> m104
+PUT 5 -> m105
+
+; WHILE b (Opcode 5 = JZ, testuje premennú 'b' (1), skáče na koniec = 116)
+PUT 5 -> m106
+PUT 1 -> m107
+PUT 116 -> m108
+
+; ADD a, b (Opcode 2, dest = 0, src = 1)
+PUT 2 -> m109
+PUT 0 -> m110
+PUT 1 -> m111
+
+; DEC b (Opcode 3, dest = 1)
+PUT 3 -> m112
+PUT 1 -> m113
+
+; END (Opcode 4 = JMP, skáče späť na WHILE = 106)
+PUT 4 -> m114
+PUT 106 -> m115
+
+; HLT (Opcode 0 = Zastavenie VM)
+PUT 0 -> m116
+
+; =================================================================
+; --- 2. JADRO VIRTUÁLNEJ MAŠINY (VM INTERPRETER) ---
+; =================================================================
+
+PUT 100 -> r1       ; r1 funguje ako Virtual PC (ukazuje na m100)
+
+vm_loop:
+    ; Načítanie inštrukcie (FETCH) cez pointer
+    PUT *r1 -> r2
+
+    ; Dekódovanie inštrukcie (DECODE)
+    JZ r2 -> vm_end
+
+    SUB r2, 1 -> r3
+    JZ r3 -> op_set
+
+    SUB r2, 2 -> r3
+    JZ r3 -> op_add
+
+    SUB r2, 3 -> r3
+    JZ r3 -> op_dec
+
+    SUB r2, 4 -> r3
+    JZ r3 -> op_jmp
+
+    SUB r2, 5 -> r3
+    JZ r3 -> op_jz
+
+    ; Ak opcode neexistuje, VM spadne
+    HLT
+
+; --- VYKONANIE INŠTRUKCIÍ (EXECUTE) ---
+
+op_set:
+    INC r1          ; Posun na index premennej (dest)
+    PUT *r1 -> r4   ; r4 = adresa premennej (napr. 0 pre 'a')
+    INC r1          ; Posun na hodnotu (val)
+    PUT *r1 -> *r4  ; Uloženie hodnoty priamo do premennej cez pointer
+    INC r1          ; Posun na ďalší opcode
+    JMP vm_loop
+
+op_add:
+    INC r1
+    PUT *r1 -> r4   ; r4 = index prvej premennej (dest)
+    INC r1
+    PUT *r1 -> r5   ; r5 = index druhej premennej (src)
+
+    ; Sčítanie hodnôt z dvoch premenných a uloženie späť do prvej
+    ADD *r4, *r5 -> *r4
+
+    INC r1
+    JMP vm_loop
+
+op_dec:
+    INC r1
+    PUT *r1 -> r4   ; r4 = index premennej (dest)
+
+    DEC *r4         ; Zníženie hodnoty v premennej
+
+    INC r1
+    JMP vm_loop
+
+op_jmp:
+    INC r1          ; Posun na cieľovú adresu (target_addr)
+    PUT *r1 -> r1   ; Prepis Virtual PC (r1) priamo cieľovou adresou
+    JMP vm_loop
+
+op_jz:
+    INC r1
+    PUT *r1 -> r4   ; r4 = index testovanej premennej (src)
+    INC r1
+    PUT *r1 -> r5   ; r5 = cieľová adresa pre skok
+
+    PUT *r4 -> r6   ; Načítanie skutočnej hodnoty premennej do r6
+    JZ r6 -> do_jump
+
+    ; Podmienka nesplnená, pokračujeme ďalej
+    INC r1
+    JMP vm_loop
+
+do_jump:
+    PUT r5 -> r1    ; Vykonanie skoku (zápis do Virtual PC)
+    JMP vm_loop
+
+vm_end:
+    HLT             ; Ukončenie celého procesora

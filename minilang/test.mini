@@ -1,0 +1,9 @@
+SET a = 0
+SET b = 5
+
+WHILE b:
+    ADD a, b
+    DEC b
+END
+
+HLT

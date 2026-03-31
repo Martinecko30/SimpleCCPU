@@ -1,0 +1,11 @@
+PUT 1 -> r1
+INC r1
+PUT r1 -> m1
+PUSH 1
+JMP 7
+PUSH 2
+PUSH 3
+PUSH 4
+PUSH 5
+POP r2
+HLT

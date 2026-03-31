@@ -1,0 +1,35 @@
+; ==========================================================
+; VYPOCET FAKTORIALU (5!)
+; Očakávaný výsledok: V registri r2 bude na konci hodnota 120
+; ==========================================================
+
+PUT 5 -> r1       ; N = 5 (číslo, ktorého faktoriál počítame)
+PUT 1 -> r2       ; r2 bude držať náš celkový výsledok (Total)
+
+outer_loop:
+    ; Ak N klesne na 0, sme hotoví a skáčeme na koniec
+    JZ r1, end
+
+    ; --- ZAČIATOK NÁSOBENIA (Total * N) ---
+    PUT 0 -> r4       ; r4 je dočasný súčet pre násobenie
+    PUT r1 -> r3      ; r3 je počítadlo pre vnútorný cyklus (nastavené na N)
+
+inner_loop:
+    ; Ak sme sčítali N-krát, vnútorný cyklus končí
+    JZ r3, end_inner
+
+    ; Pripočítame Total (r2) k dočasnému súčtu (r4)
+    ADD r4, r2 -> r4
+
+    DEC r3            ; Znížime počítadlo vnútorného cyklu
+    JMP inner_loop    ; Opakujeme sčítavanie
+
+end_inner:
+    ; --- KONIEC NÁSOBENIA ---
+    PUT r4 -> r2      ; Uložíme nový výsledok späť do r2
+
+    DEC r1            ; Znížime N (napr. z 5 na 4)
+    JMP outer_loop    ; Pokračujeme ďalším číslom vo faktoriáli
+
+end:
+    HLT               ; Procesor sa zastaví, pozri sa do registra r2!

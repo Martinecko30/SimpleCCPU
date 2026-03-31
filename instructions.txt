@@ -1,0 +1,14 @@
+read = reg / lit / mem / ptr
+write = reg / mem / ptr
+
+ADD read, read -> r3
+SUB read, read -> r3
+INC write
+DEC write
+PUT read -> write
+PUSH read
+POP write
+JMP mem
+JZ read -> mem
+JNZ read -> mem
+HLT

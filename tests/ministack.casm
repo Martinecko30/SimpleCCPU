@@ -1,0 +1,85 @@
+; =================================================================
+; 1. ČASŤ: NAHRATIE BYTECODU DO PAMÄTE (Flashovanie ROM)
+; Náš MiniStack program uložíme do pamäte od bunky m100.
+; =================================================================
+
+; Zápis inštrukcie: PUSH_VAL 5
+PUT 1 -> m100       ; Opcode 1 (PUSH_VAL)
+PUT 5 -> m101       ; Argument (hodnota 5)
+
+; Zápis inštrukcie: PUSH_VAL 7
+PUT 1 -> m102       ; Opcode 1 (PUSH_VAL)
+PUT 7 -> m103       ; Argument (hodnota 7)
+
+; Zápis inštrukcie: ADD_STACK
+PUT 2 -> m104       ; Opcode 2 (ADD_STACK)
+
+; Zápis inštrukcie: HALT_VM
+PUT 0 -> m105       ; Opcode 0 (Koniec programu)
+
+
+; =================================================================
+; 2. ČASŤ: VLASTNÁ VIRTUÁLNA MAŠINA (Interpreter)
+; =================================================================
+
+PUT 100 -> r1       ; r1 je náš "Virtual Instruction Pointer" (VIP). Ukazuje na m100.
+
+vm_loop:
+    ; FETCH (Načítanie inštrukcie cez Pointer)
+    ; Procesor sa pozrie, aká adresa je v r1 (napr. 100), a prečíta m100 do r2
+    PUT *r1 -> r2
+
+    ; DECODE (Dekódovanie inštrukcie)
+    ; Je to 0 (HALT_VM)? Ak áno, skoč na koniec.
+    JZ r2, vm_end
+
+    ; Je to 1 (PUSH_VAL)?
+    ; Keďže nemáme inštrukciu CMP (Compare), odčítame 1 a ak je výsledok 0, tak to bola jednotka!
+    SUB r2, 1 -> r3
+    JZ r3, op_push_val
+
+    ; Je to 2 (ADD_STACK)?
+    ; Odčítame 2 od pôvodného opcode.
+    SUB r2, 2 -> r3
+    JZ r3, op_add_stack
+
+    ; Ak to nie je ani jedno (neznámy opcode), preskočíme to.
+    JMP next_instr
+
+; --- VYKONANIE INŠTRUKCIÍ (EXECUTE) ---
+
+op_push_val:
+    ; Musíme prečítať argument. Posunieme VIP (r1) o jedno dopredu.
+    INC r1
+
+    ; Prečítame argument cez pointer (napr. prečíta m101, čo je 5)
+    PUT *r1 -> r4
+
+    ; Hodíme ho na reálny zásobník tvojho procesora
+    PUSH r4
+    JMP next_instr
+
+op_add_stack:
+    ; Vyberieme dve čísla z reálneho zásobníka
+    POP r4
+    POP r5
+
+    ; Sčítame ich a hodíme výsledok späť na zásobník
+    ADD r4, r5 -> r6
+    PUSH r6
+    JMP next_instr
+
+next_instr:
+    ; Inštrukcia prebehla. Posunieme VIP (r1) na ďalší Opcode a ideme odznova.
+    INC r1
+    JMP vm_loop
+
+
+; =================================================================
+; 3. ČASŤ: UKONČENIE A KONTROLA
+; =================================================================
+vm_end:
+    ; Naša vnútorná VM skončila. Výsledok výpočtu 5+7 by mal byť na vrchole zásobníka.
+    POP r6          ; Uložíme si ho do r6, aby sme ho jasne videli v debug výpise!
+
+    HLT             ; Vypnutie hlavného (tvojho) procesora

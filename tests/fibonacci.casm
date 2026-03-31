@@ -1,0 +1,31 @@
+; ==========================================================
+; GENERÁTOR FIBONACCIHO POSTUPNOSTI NA ZÁSOBNÍK
+; Vygeneruje 10 čísel a uloží ich cez PUSH do pamäte
+; ==========================================================
+
+PUT 10 -> r1    ; Počítadlo cyklov (koľko čísel chceme vygenerovať)
+PUT 0 -> r2     ; Predchádzajúce číslo: F(n-1)
+PUT 1 -> r3     ; Aktuálne číslo: F(n)
+
+loop_start:
+    ; Ak sme vygenerovali 10 čísel, program končí
+    JZ r1, end
+
+    ; Uložíme aktuálne Fibonacciho číslo na zásobník!
+    PUSH r3
+
+    ; Vypočítame ďalšie číslo v poradí: r4 = r2 + r3
+    ADD r2, r3 -> r4
+
+    ; Posunieme "okno" hodnôt o jedno dopredu
+    ; Staré aktuálne číslo (r3) sa stane predchádzajúcim (r2)
+    PUT r3 -> r2
+
+    ; Novovypočítané číslo (r4) sa stane aktuálnym (r3)
+    PUT r4 -> r3
+
+    DEC r1          ; Znížime počítadlo cyklov
+    JMP loop_start  ; Skočíme na začiatok a opakujeme
+
+end:
+    HLT
