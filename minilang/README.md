@@ -129,6 +129,7 @@ When you run the Minilang Compiler, your code undergoes several transformations:
 
 Because Minilang supports pointers and arrays, you can write foundational OS systems like a Heap Allocator directly in the language:
 
+
 ```miniliang
 ARRAY heap_map[256]
 
