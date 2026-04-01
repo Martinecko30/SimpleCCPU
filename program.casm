@@ -1,0 +1,555 @@
+PUT 100 -> m99
+JMP skip_func_1
+os_init:
+PUSH BP
+PUT SP -> BP
+PUSH 0
+PUT 0 -> r8
+PUT BP -> r4
+PUT r8 -> *r4
+PUSH 0
+PUT 0 -> r8
+PUT BP -> r4
+ADD r4, -1 -> r4
+PUT r8 -> *r4
+PUT 256 -> r2
+PUT BP -> r4
+PUT *r4 -> r3
+SUB r2, r3 -> r8
+PUT BP -> r4
+ADD r4, -1 -> r4
+PUT r8 -> *r4
+loop_start_2:
+PUT BP -> r4
+ADD r4, -1 -> r4
+PUT *r4 -> r1
+JZ r1, loop_end_2
+PUT 0 -> r8
+PUT BP -> r4
+PUT *r4 -> r5
+PUT 406 -> r4
+ADD r4, r5 -> r4
+PUT r8 -> *r4
+PUT BP -> r4
+PUT *r4 -> r2
+PUT 1 -> r3
+ADD r2, r3 -> r8
+PUT BP -> r4
+PUT r8 -> *r4
+PUT 256 -> r2
+PUT BP -> r4
+PUT *r4 -> r3
+SUB r2, r3 -> r8
+PUT BP -> r4
+ADD r4, -1 -> r4
+PUT r8 -> *r4
+JMP loop_start_2
+loop_end_2:
+PUT 0 -> r1
+PUT BP -> SP
+POP BP
+RET
+PUT 0 -> r1
+PUT BP -> SP
+POP BP
+RET
+skip_func_1:
+JMP skip_func_3
+memalloc:
+PUSH BP
+PUT SP -> BP
+PUSH 0
+PUT 0 -> r8
+PUT BP -> r4
+PUT r8 -> *r4
+PUSH 0
+PUT 0 -> r8
+PUT BP -> r4
+ADD r4, -1 -> r4
+PUT r8 -> *r4
+PUSH 0
+PUT 0 -> r8
+PUT BP -> r4
+ADD r4, -2 -> r4
+PUT r8 -> *r4
+PUSH 0
+PUT 0 -> r8
+PUT BP -> r4
+ADD r4, -3 -> r4
+PUT r8 -> *r4
+PUSH 0
+PUT 0 -> r8
+PUT BP -> r4
+ADD r4, -4 -> r4
+PUT r8 -> *r4
+PUSH 0
+PUT 0 -> r8
+PUT BP -> r4
+ADD r4, -5 -> r4
+PUT r8 -> *r4
+PUT 256 -> r2
+PUT BP -> r4
+PUT *r4 -> r3
+SUB r2, r3 -> r8
+PUT BP -> r4
+ADD r4, -3 -> r4
+PUT r8 -> *r4
+loop_start_4:
+PUT BP -> r4
+ADD r4, -3 -> r4
+PUT *r4 -> r1
+JZ r1, loop_end_4
+PUT BP -> r4
+PUT *r4 -> r5
+PUT 406 -> r4
+ADD r4, r5 -> r4
+PUT *r4 -> r8
+PUT BP -> r4
+ADD r4, -4 -> r4
+PUT r8 -> *r4
+PUT BP -> r4
+ADD r4, -4 -> r4
+PUT *r4 -> r1
+JZ r1, else_5
+PUT 0 -> r8
+PUT BP -> r4
+ADD r4, -1 -> r4
+PUT r8 -> *r4
+JMP endif_5
+else_5:
+PUT BP -> r4
+ADD r4, -1 -> r4
+PUT *r4 -> r1
+JZ r1, else_6
+JMP endif_6
+else_6:
+PUT BP -> r4
+PUT *r4 -> r8
+PUT BP -> r4
+ADD r4, -2 -> r4
+PUT r8 -> *r4
+endif_6:
+PUT BP -> r4
+ADD r4, -1 -> r4
+PUT *r4 -> r2
+PUT 1 -> r3
+ADD r2, r3 -> r8
+PUT BP -> r4
+ADD r4, -1 -> r4
+PUT r8 -> *r4
+PUT BP -> r4
+ADD r4, 3 -> r4
+PUT *r4 -> r2
+PUT BP -> r4
+ADD r4, -1 -> r4
+PUT *r4 -> r3
+SUB r2, r3 -> r8
+PUT BP -> r4
+ADD r4, -5 -> r4
+PUT r8 -> *r4
+PUT BP -> r4
+ADD r4, -5 -> r4
+PUT *r4 -> r1
+JZ r1, else_7
+JMP endif_7
+else_7:
+PUSH 0
+PUT BP -> r4
+ADD r4, -2 -> r4
+PUT *r4 -> r8
+PUT BP -> r4
+ADD r4, -6 -> r4
+PUT r8 -> *r4
+PUSH 0
+PUT BP -> r4
+ADD r4, 3 -> r4
+PUT *r4 -> r8
+PUT BP -> r4
+ADD r4, -7 -> r4
+PUT r8 -> *r4
+loop_start_8:
+PUT BP -> r4
+ADD r4, -7 -> r4
+PUT *r4 -> r1
+JZ r1, loop_end_8
+PUT 1 -> r8
+PUT BP -> r4
+ADD r4, -6 -> r4
+PUT *r4 -> r5
+PUT 406 -> r4
+ADD r4, r5 -> r4
+PUT r8 -> *r4
+PUT BP -> r4
+ADD r4, -6 -> r4
+PUT *r4 -> r2
+PUT 1 -> r3
+ADD r2, r3 -> r8
+PUT BP -> r4
+ADD r4, -6 -> r4
+PUT r8 -> *r4
+PUT BP -> r4
+ADD r4, -7 -> r4
+PUT *r4 -> r2
+PUT 1 -> r3
+SUB r2, r3 -> r8
+PUT BP -> r4
+ADD r4, -7 -> r4
+PUT r8 -> *r4
+JMP loop_start_8
+loop_end_8:
+PUT BP -> r4
+ADD r4, -2 -> r4
+PUT *r4 -> r1
+PUT BP -> SP
+POP BP
+RET
+endif_7:
+endif_5:
+PUT BP -> r4
+PUT *r4 -> r2
+PUT 1 -> r3
+ADD r2, r3 -> r8
+PUT BP -> r4
+PUT r8 -> *r4
+PUT 256 -> r2
+PUT BP -> r4
+PUT *r4 -> r3
+SUB r2, r3 -> r8
+PUT BP -> r4
+ADD r4, -3 -> r4
+PUT r8 -> *r4
+JMP loop_start_4
+loop_end_4:
+PUT -1 -> r1
+PUT BP -> SP
+POP BP
+RET
+PUT 0 -> r1
+PUT BP -> SP
+POP BP
+RET
+skip_func_3:
+JMP skip_func_9
+free:
+PUSH BP
+PUT SP -> BP
+PUSH 0
+PUT BP -> r4
+ADD r4, 3 -> r4
+PUT *r4 -> r8
+PUT BP -> r4
+PUT r8 -> *r4
+loop_start_10:
+PUT BP -> r4
+PUT *r4 -> r1
+JZ r1, loop_end_10
+PUT 0 -> r8
+PUT BP -> r4
+ADD r4, 4 -> r4
+PUT *r4 -> r5
+PUT 406 -> r4
+ADD r4, r5 -> r4
+PUT r8 -> *r4
+PUT BP -> r4
+ADD r4, 4 -> r4
+PUT *r4 -> r2
+PUT 1 -> r3
+ADD r2, r3 -> r8
+PUT BP -> r4
+ADD r4, 4 -> r4
+PUT r8 -> *r4
+PUT BP -> r4
+PUT *r4 -> r2
+PUT 1 -> r3
+SUB r2, r3 -> r8
+PUT BP -> r4
+PUT r8 -> *r4
+JMP loop_start_10
+loop_end_10:
+PUT 0 -> r1
+PUT BP -> SP
+POP BP
+RET
+PUT 0 -> r1
+PUT BP -> SP
+POP BP
+RET
+skip_func_9:
+JMP skip_func_11
+print:
+PUSH BP
+PUT SP -> BP
+PUSH 0
+PUT 0 -> r8
+PUT BP -> r4
+PUT r8 -> *r4
+PUSH 0
+PUT 0 -> r8
+PUT BP -> r4
+ADD r4, -1 -> r4
+PUT r8 -> *r4
+PUSH 0
+PUT 0 -> r8
+PUT BP -> r4
+ADD r4, -2 -> r4
+PUT r8 -> *r4
+PUT BP -> r4
+ADD r4, 3 -> r4
+PUT *r4 -> r2
+PUT BP -> r4
+PUT *r4 -> r3
+SUB r2, r3 -> r8
+PUT BP -> r4
+ADD r4, -1 -> r4
+PUT r8 -> *r4
+loop_start_12:
+PUT BP -> r4
+ADD r4, -1 -> r4
+PUT *r4 -> r1
+JZ r1, loop_end_12
+PUT BP -> r4
+PUT *r4 -> r5
+PUT BP -> r4
+ADD r4, 4 -> r4
+PUT *r4 -> r4
+ADD r4, r5 -> r4
+PUT *r4 -> r8
+PUT BP -> r4
+ADD r4, -2 -> r4
+PUT r8 -> *r4
+PUT BP -> r4
+ADD r4, -2 -> r4
+PUT *r4 -> r2
+PUT m99 -> r7
+PUT r2 -> *r7
+INC r7
+PUT r7 -> m99
+PUT BP -> r4
+PUT *r4 -> r2
+PUT 1 -> r3
+ADD r2, r3 -> r8
+PUT BP -> r4
+PUT r8 -> *r4
+PUT BP -> r4
+ADD r4, 3 -> r4
+PUT *r4 -> r2
+PUT BP -> r4
+PUT *r4 -> r3
+SUB r2, r3 -> r8
+PUT BP -> r4
+ADD r4, -1 -> r4
+PUT r8 -> *r4
+JMP loop_start_12
+loop_end_12:
+PUT 0 -> r1
+PUT BP -> SP
+POP BP
+RET
+PUT 0 -> r1
+PUT BP -> SP
+POP BP
+RET
+skip_func_11:
+JMP skip_func_13
+getc:
+PUSH BP
+PUT SP -> BP
+PUSH 0
+PUT 0 -> r8
+PUT BP -> r4
+PUT r8 -> *r4
+PUSH 0
+PUT 10 -> r8
+PUT BP -> r4
+ADD r4, -1 -> r4
+PUT r8 -> *r4
+loop_start_14:
+PUT 1 -> r1
+JZ r1, loop_end_14
+PUT BP -> r4
+ADD r4, -1 -> r4
+PUT *r4 -> r4
+PUT *r4 -> r8
+PUT BP -> r4
+PUT r8 -> *r4
+PUT BP -> r4
+PUT *r4 -> r1
+JZ r1, else_15
+PUT BP -> r4
+PUT *r4 -> r1
+PUT BP -> SP
+POP BP
+RET
+JMP endif_15
+else_15:
+endif_15:
+JMP loop_start_14
+loop_end_14:
+PUT 0 -> r1
+PUT BP -> SP
+POP BP
+RET
+skip_func_13:
+JMP skip_func_16
+exec:
+PUSH BP
+PUT SP -> BP
+PUSH 0
+PUT 0 -> r8
+PUT BP -> r4
+PUT r8 -> *r4
+PUT BP -> r4
+ADD r4, 3 -> r4
+PUT *r4 -> r2
+PUT 1 -> r3
+SUB r2, r3 -> r8
+PUT BP -> r4
+PUT r8 -> *r4
+PUT BP -> r4
+PUT *r4 -> r1
+JZ r1, else_17
+JMP endif_17
+else_17:
+CALL app_shell
+PUT 0 -> r1
+PUT BP -> SP
+POP BP
+RET
+endif_17:
+PUT BP -> r4
+ADD r4, 3 -> r4
+PUT *r4 -> r2
+PUT 2 -> r3
+SUB r2, r3 -> r8
+PUT BP -> r4
+PUT r8 -> *r4
+PUT BP -> r4
+PUT *r4 -> r1
+JZ r1, else_18
+JMP endif_18
+else_18:
+CALL app_monitor
+PUT 0 -> r1
+PUT BP -> SP
+POP BP
+RET
+endif_18:
+PUT -1 -> r1
+PUT BP -> SP
+POP BP
+RET
+PUT 0 -> r1
+PUT BP -> SP
+POP BP
+RET
+skip_func_16:
+JMP skip_func_19
+app_shell:
+PUSH BP
+PUT SP -> BP
+PUSH 0
+PUT 0 -> r8
+PUT BP -> r4
+PUT r8 -> *r4
+PUT 10 -> r2
+PUSH r2
+CALL memalloc
+POP r6
+PUT r1 -> r8
+PUT BP -> r4
+PUT r8 -> *r4
+PUSH 0
+PUT 0 -> r8
+PUT BP -> r4
+ADD r4, -1 -> r4
+PUT r8 -> *r4
+PUSH 0
+PUT 0 -> r8
+PUT BP -> r4
+ADD r4, -2 -> r4
+PUT r8 -> *r4
+PUT BP -> r4
+ADD r4, -1 -> r4
+PUT *r4 -> r2
+PUT 113 -> r3
+SUB r2, r3 -> r8
+PUT BP -> r4
+ADD r4, -2 -> r4
+PUT r8 -> *r4
+loop_start_20:
+PUT BP -> r4
+ADD r4, -2 -> r4
+PUT *r4 -> r1
+JZ r1, loop_end_20
+CALL getc
+PUT r1 -> r8
+PUT BP -> r4
+ADD r4, -1 -> r4
+PUT r8 -> *r4
+PUT BP -> r4
+ADD r4, -1 -> r4
+PUT *r4 -> r2
+PUT m99 -> r7
+PUT r2 -> *r7
+INC r7
+PUT r7 -> m99
+PUT BP -> r4
+ADD r4, -1 -> r4
+PUT *r4 -> r2
+PUT 113 -> r3
+SUB r2, r3 -> r8
+PUT BP -> r4
+ADD r4, -2 -> r4
+PUT r8 -> *r4
+JMP loop_start_20
+loop_end_20:
+PUT BP -> r4
+PUT *r4 -> r2
+PUSH r2
+PUT 10 -> r2
+PUSH r2
+CALL free
+POP r6
+POP r6
+PUT 0 -> r1
+PUT BP -> SP
+POP BP
+RET
+PUT 0 -> r1
+PUT BP -> SP
+POP BP
+RET
+skip_func_19:
+JMP skip_func_21
+app_monitor:
+PUSH BP
+PUT SP -> BP
+PUT 0 -> r1
+PUT BP -> SP
+POP BP
+RET
+PUT 0 -> r1
+PUT BP -> SP
+POP BP
+RET
+skip_func_21:
+JMP skip_func_22
+kernel_main:
+PUSH BP
+PUT SP -> BP
+CALL os_init
+PUT 1 -> r2
+PUSH r2
+CALL exec
+POP r6
+PUT 0 -> r1
+PUT BP -> SP
+POP BP
+RET
+PUT 0 -> r1
+PUT BP -> SP
+POP BP
+RET
+skip_func_22:
+CALL kernel_main
+HLT
