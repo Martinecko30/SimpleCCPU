@@ -1,0 +1,103 @@
+; ==========================================================
+; MyOS - Kernel & Bootloader
+; Architektúra: Zbernica (Bus), MMIO (Klávesnica m10, VRAM m100-m129)
+; ==========================================================
+
+; --- 1. BOOT SEQUENCE (Init) ---
+boot:
+    PUT isr_keyboard -> m1
+    PUT isr_syscall -> m2
+
+    PUT 0 -> m20
+    PUT 0 -> m21
+    PUT 100 -> m30
+
+; --- 2. KERNEL MAIN LOOP (User Space) ---
+kernel_loop:
+    JZ m20, kernel_loop
+
+    PUT 0 -> m20
+    PUT m21 -> r1
+
+    ; Check for 'q' (ASCII 113) -> Shutdown
+    PUT r1 -> r2
+    SUB r2, 113 -> r2
+    JZ r2, shutdown
+
+    ; Check for 'c' (ASCII 99) -> Math Test
+    PUT r1 -> r2
+    SUB r2, 99 -> r2
+    JZ r2, run_math
+
+    CALL print_char
+    JMP kernel_loop
+
+run_math:
+    CALL alu_test
+    JMP kernel_loop
+
+shutdown:
+    HLT
+
+; ==============
+; 3. PODPROGRAMY
+; ==============
+
+print_char:
+    INT 2
+    RET
+
+alu_test:
+    PUSH r1
+    PUSH r2
+
+    PUT 10 -> r2              ; r2 = 10
+    MUL r2, 10 -> r2          ; r2 = 100
+    DIV r2, 2 -> r2           ; r2 = 50
+    SHL r2, 1 -> r2           ; r2 = 100
+    SHR r2, 2 -> r2           ; r2 = 25
+    ADD r2, 40 -> r2          ; r2 = 65  ('A')
+    DEC r2                    ; r2 = 64  ('@')
+    INC r2                    ; r2 = 65  ('A')
+
+    PUT r2 -> r1
+    CALL print_char
+
+    POP r2
+    POP r1
+    RET
+
+; =============================
+; 4. INTERRUPT SERVICE ROUTINES
+; =============================
+
+isr_keyboard:
+    PUSH r5
+
+    PUT m10 -> r5
+    PUT r5 -> m21
+    PUT 1 -> m20
+
+    POP r5
+    IRET
+
+isr_syscall:
+    PUSH r5
+    PUSH r6
+
+    PUT m30 -> r5
+
+    PUT r1 -> *r5
+
+    INC r5
+    PUT r5 -> m30
+
+    PUT r5 -> r6
+    SUB r6, 130 -> r6
+    JNZ r6, syscall_end
+    PUT 100 -> m30
+
+syscall_end:
+    POP r6
+    POP r5
+    IRET

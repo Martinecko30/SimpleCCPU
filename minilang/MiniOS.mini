@@ -1,0 +1,169 @@
+// ==========================================
+// MiniOS Kernel
+// ==========================================
+
+ARRAY heap[256]       // Physical memory for applications
+ARRAY heap_map[256]   // 0 = free, 1 = occupied
+
+// --- OS INITIALIZATION ---
+FUNC os_init()
+    LET i = 0
+    LET cond = 0
+
+    cond = 256 - i
+    WHILE cond
+        heap_map[i] = 0
+        i = i + 1
+        cond = 256 - i
+    END
+    RETURN 0
+ENDFUNC
+
+// --- MEMORY MANAGEMENT ---
+// Returns index of first free block, otherwise -1 if there is no space
+FUNC memalloc(size)
+    LET i = 0
+    LET free_count = 0
+    LET start_idx = 0
+    LET cond = 0
+    LET is_used = 0
+    LET diff = 0
+
+    cond = 256 - i
+    WHILE cond
+        is_used = heap_map[i]
+
+        IF is_used
+            free_count = 0
+        ELSE
+            IF free_count
+            ELSE
+                start_idx = i
+            END
+
+            free_count = free_count + 1
+            diff = size - free_count
+
+            IF diff
+            ELSE
+                LET j = start_idx
+                LET mark_cond = size
+                WHILE mark_cond
+                    heap_map[j] = 1
+                    j = j + 1
+                    mark_cond = mark_cond - 1
+                END
+                RETURN start_idx
+            END
+        END
+
+        i = i + 1
+        cond = 256 - i
+    END
+
+    RETURN -1 // Out of memory
+ENDFUNC
+
+// Freeing of memory (index and block size)
+FUNC free(idx, size)
+    LET cond = size
+    WHILE cond
+        heap_map[idx] = 0
+        idx = idx + 1
+        cond = cond - 1
+    END
+    RETURN 0
+ENDFUNC
+
+// --- STANDARD I/O ---
+FUNC print(str_ptr, len)
+    LET i = 0
+    LET cond = 0
+    LET char = 0
+
+    cond = len - i
+    WHILE cond
+        char = str_ptr[i]
+        PUTC char
+        i = i + 1
+        cond = len - i
+    END
+    RETURN 0
+ENDFUNC
+
+FUNC getc()
+    LET key = 0
+    LET addr = 10  // The start_address of Keyboard peripheral
+
+    // Polling loop: Wait until a key is pressed
+    WHILE 1
+        // We use pointer syntax (*addr) to read from memory address 10
+        key = *addr
+
+        IF key
+            // A key was pressed (value is not 0), break the loop and return it
+            RETURN key
+        END
+    END
+ENDFUNC
+
+// --- PROCESS DISPATCHER ---
+// Simple program dispatcher
+FUNC exec(pid)
+    LET diff = 0
+
+    diff = pid - 1
+    IF diff
+    ELSE
+        CALL app_shell()
+        RETURN 0
+    END
+
+    diff = pid - 2
+    IF diff
+    ELSE
+        CALL app_monitor()
+        RETURN 0
+    END
+
+    RETURN -1 // Unknown process
+ENDFUNC
+
+// ==========================================
+// USERSPACE (Applications)
+// ==========================================
+
+FUNC app_shell()
+    LET my_ram = 0
+    my_ram = CALL memalloc(10)
+
+    LET char = 0
+    LET cond = 0
+    cond = char - 113    // 'q'
+    WHILE cond
+        char = CALL getc()
+        PUTC char
+        cond = char - 113    // 'q'
+    END
+
+    CALL free(my_ram, 10)
+    RETURN 0
+ENDFUNC
+
+FUNC app_monitor()
+    RETURN 0
+ENDFUNC
+
+// ==========================================
+// KERNEL ENTRY POINT
+// ==========================================
+FUNC kernel_main()
+    CALL os_init()
+
+    // Spustí PID 1 (Shell)
+    CALL exec(1)
+
+    RETURN 0
+ENDFUNC
+
+CALL kernel_main()

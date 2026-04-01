@@ -1,0 +1,164 @@
+// Constants
+ARRAY source[4096]      // Source code
+ARRAY buffer[16]        // Buffer
+ARRAY casm_keyword[8]   // Keyword buffer
+ARRAY mini_keyword[16]  // Minilang keyword buffer
+
+
+// ========================
+//      CASM Keywords
+// ========================
+
+// "PUTC"
+FUNC putc_keyword(buffer)
+    buffer[0] = 80
+    buffer[1] = 85
+    buffer[2] = 84
+    buffer[3] = 67
+    RETURN
+ENDFUNC
+
+// "HLT"
+FUNC hlt_keyword(buffer)
+    buffer[0] = 72
+    buffer[1] = 76
+    buffer[2] = 84
+    RETURN
+ENDFUNC
+
+// "PUSH"
+FUNC push_keyword(buffer)
+    buffer[0] = 80
+    buffer[1] = 85
+    buffer[2] = 83
+    buffer[3] = 72
+    RETURN
+ENDFUNC
+
+// "RET"
+FUNC ret_keyword(buffer)
+    buffer[0] = 72
+    buffer[0] = 69
+    buffer[0] = 84
+    RETURN
+ENDFUNC
+
+// "POP"
+FUNC pop_keyword(buffer)
+    buffer[0] = 80
+    buffer[1] = 85
+    buffer[2] = 83
+    buffer[3] = 72
+    RETURN
+ENDFUNC
+
+
+// ========================
+//      MINI Keywords
+// ========================
+
+// "LET"
+FUNC LET_keyword(buffer)
+    buffer[0] = 76
+    buffer[1] = 69
+    buffer[2] = 84
+    RETURN
+ENDFUNC
+
+
+
+// Checks whether first array equals second
+FUNC str_equals(first, len1, second, len2)
+    LET i = 0
+    LET cond = 0
+    LET char1 = 0
+    LET char2 = 0
+    LET diff = 0
+
+    cond = len1 - len2
+    IF cond
+        RETURN 0
+    END
+
+    cond = len1 - i
+    WHILE cond
+        char1 = first[i]
+        char2 = second[i]
+        diff = char1 - char2
+
+        IF diff
+            RETURN 0
+        END
+
+        i = i + 1
+        cond = len1 - i
+    END
+    RETURN 1
+ENDFUNC
+
+FUNC clear_buffer(buffer, len)
+    LET i = 0
+    LET cond = 0
+
+    cond = len - i
+    WHILE cond
+        buffer[i] = 0
+
+        i = i + 1
+        cond = len - i
+    END
+    RETURN
+ENDFUNC
+
+FUNC print(buffer, len)
+    LET i = 0
+    LET cond = 0
+    LET char = 0
+
+    cond = len - i
+    WHILE cond
+        char = buffer[i]
+
+        PUTC char
+
+        i = i + 1
+        cond = len - i
+    END
+    RETURN
+ENDFUNC
+
+
+FUNC check_keywords(buffer, len)
+    LET cond = 0
+
+    cond = CALL
+ENDFUNC
+
+FUNC compile()
+    LET i = 0
+    LET j = 0
+    LET char = 0
+    LET cond = 0
+
+    i = 0
+    char = source[i]
+
+    WHILE char
+        buffer[j] = char
+        j = j + 1
+
+        cond = char - 32
+        IF cond
+        ELSE
+            CALL check_keywords(&buffer, j)
+
+            CALL clear_buffer(&buffer, j)
+            j = 0
+        END
+
+        i = i + 1
+        char = source[i]
+    END
+ENDFUNC
+
+CALL compile()

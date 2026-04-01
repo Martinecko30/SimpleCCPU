@@ -6,6 +6,10 @@ SUB read, read -> r3
 INC write
 DEC write
 PUT read -> write
+MUL
+DIV
+SHL
+SHR
 PUSH read
 POP write
 JMP mem
