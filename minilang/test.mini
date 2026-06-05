@@ -1,0 +1,44 @@
+func print(str_ptr) {
+    let cursor = 97
+    let i = 0
+    let char = str_ptr[i]
+
+    while (char != 0) {
+        *cursor = char
+
+        cursor = cursor + 1
+
+        i = i + 1
+        char = str_ptr[i]
+    }
+}
+
+func test(arg1, arg2, arg3, arg4, arg5) {
+    return arg1 * arg2 / arg3 + arg4 - arg5
+}
+
+func main() {
+    let linked_list[2] = { 0, 0 }
+
+    let node1[2] = { '1', 0 }
+    let node2[2] = { '2', 0 }
+    node1[1] = node2
+    let node3[2] = { '3', 0 }
+    node2[1] = node3
+
+    linked_list[0] = node1
+    linked_list[1] = node3
+
+    print_list(linked_list[0])
+
+    let *my_str = "Hello, World!"
+
+    let x = 65 // 'A'
+    let y = 'A'
+
+    let memory[100] = { 0 }
+    let my_ptr = &memory
+}
+
+// Call main or write code here
+main()

@@ -11,10 +11,10 @@ class Computer:
         for p in self.__peripherals:
             self.__bus.connect_device(p)
 
-    def start(self, program: str, debug: bool, should_reset: bool) -> Status:
+    def start(self, program: str, debug: bool, should_reset: bool) -> tuple[Status, list[int]]:
         result = self.__cpu.run_program(program, debug)
 
         if should_reset:
             self.__cpu.reset()
 
-        return result[0]
+        return result[0], result[1]

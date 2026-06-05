@@ -1,18 +1,44 @@
-read = reg / lit / mem / ptr
-write = reg / mem / ptr
+=========================================================
+                CASM INSTRUCTION REFERENCE
+=========================================================
 
-ADD read, read -> r3
-SUB read, read -> r3
-INC write
-DEC write
-PUT read -> write
-MUL
-DIV
-SHL
-SHR
-PUSH read
-POP write
-JMP mem
-JZ read -> mem
-JNZ read -> mem
-HLT
+--- OPERAND ALIASES ---
+read  = reg | lit | mem | ptr
+write = reg | mem | ptr
+
+reg : Register (e.g., r1, SP, BP)
+lit : Literal integer (e.g., 42, -5)
+mem : Direct memory address (e.g., m150)
+ptr : Indirect memory pointer (e.g., *r4)
+
+* Note: A literal (lit) can only be read from, never written to.
+
+--- INSTRUCTION SET ---
+
+[ ARITHMETIC & LOGIC ]
+ADD  <read>, <read> -> <write>    ; Adds two values and stores the result
+SUB  <read>, <read> -> <write>    ; Subtracts the second value from the first
+MUL  <read>, <read> -> <write>    ; Multiplies two values
+DIV  <read>, <read> -> <write>    ; Divides the first value by the second
+SHL  <read>, <read> -> <write>    ; Shifts the first value left by the second value
+SHR  <read>, <read> -> <write>    ; Shifts the first value right by the second value
+
+[ INCREMENT & DECREMENT ]
+INC  <write>                      ; Increases the destination value by 1
+DEC  <write>                      ; Decreases the destination value by 1
+
+[ DATA MOVEMENT ]
+PUT  <read> -> <write>            ; Copies a value from source to destination
+
+[ STACK OPERATIONS ]
+PUSH <read>                       ; Pushes a value onto the top of the stack
+POP  <write>                      ; Pops the top stack value into the destination
+
+[ CONTROL FLOW & JUMPS ]
+JMP  <mem>                        ; Unconditionally jumps to the target memory address/label
+JZ   <read> -> <mem>              ; Jumps to target if the read value is equal to 0
+JNZ  <read> -> <mem>              ; Jumps to target if the read value is NOT equal to 0
+
+[ SYSTEM ]
+HLT                               ; Halts CPU execution
+=========================================================

@@ -30,6 +30,10 @@ class Operation(Enum):
     CALL = (17, 1)
     RET = (18, 0)
 
+    SLT = (19, 3)
+    SGT = (20, 3)
+    SEQ = (21, 3)
+
     HLT = (0, 0)
 
     def __init__(self, opcode: int, operand_count: int):
@@ -129,7 +133,7 @@ class Emulator:
         self.__code_lines = 0
 
     def run_program(self, file_name: str, debug: bool)\
-            -> tuple[Status, int, int]:
+            -> tuple[Status, list[int], int]:
         """file_name should lead to Custom-ASM file"""
         code: list[Instruction] = parse_to_instructions(file_name)
         self.__code_lines = len(code)
@@ -155,7 +159,7 @@ class Emulator:
         if self.__PC >= self.__code_lines and self.__status == Status.OK:
             self.__status = Status.MEMORY_ERROR
 
-        return self.__status, self.__PC, self.__registers['SP']
+        return self.__status, self.__bus.ram, self.__PC
 
     def _execute_instruction(self, instruction: Instruction, debug: bool)\
             -> None:
@@ -464,6 +468,36 @@ class Emulator:
         return_address = self.__bus.read(self.__registers['SP'])
 
         self.__PC = return_address
+
+    def _slt(self, args: list[str]) -> None:
+        val1 = self._read_operand(args[0])
+        val2 = self._read_operand(args[1])
+        if val1 is None or val2 is None:
+            self.__status = Status.BAD_OPERAND
+            return
+
+        if not self._write_operand(args[2], 1 if val1 < val2 else 0):
+            self.__status = Status.BAD_OPERAND
+
+    def _sgt(self, args: list[str]) -> None:
+        val1 = self._read_operand(args[0])
+        val2 = self._read_operand(args[1])
+        if val1 is None or val2 is None:
+            self.__status = Status.BAD_OPERAND
+            return
+
+        if not self._write_operand(args[2], 1 if val1 > val2 else 0):
+            self.__status = Status.BAD_OPERAND
+
+    def _seq(self, args: list[str]) -> None:
+        val1 = self._read_operand(args[0])
+        val2 = self._read_operand(args[1])
+        if val1 is None or val2 is None:
+            self.__status = Status.BAD_OPERAND
+            return
+
+        if not self._write_operand(args[2], 1 if val1 == val2 else 0):
+            self.__status = Status.BAD_OPERAND
 
     def _hlt(self, args: list[str]):
         self.__status = Status.HALTED

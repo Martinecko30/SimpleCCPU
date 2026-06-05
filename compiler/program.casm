@@ -1,0 +1,184 @@
+JMP FUNC_print_END
+FUNC_print_START:
+PUSH BP
+PUT SP -> BP
+PUT 97 -> r1
+PUT r1 -> m0
+PUT 0 -> r1
+PUT r1 -> m1
+PUT BP -> r1
+ADD r1, 2 -> r1
+PUT *r1 -> r1
+PUSH r1
+PUT m1 -> r1
+PUT r1 -> r2
+POP r1
+ADD r1, r2 -> r1
+PUT *r1 -> r1
+PUT r1 -> m2
+WHILE_START_1:
+PUT m2 -> r1
+PUSH r1
+PUT 0 -> r2
+POP r1
+SEQ r1, r2 -> r1
+SUB 1, r1 -> r1
+JZ r1 -> WHILE_END_2
+PUT m2 -> r1
+PUT r1 -> r3
+PUT m0 -> r1
+PUT r3 -> *r1
+PUT r3 -> r2
+PUT m0 -> r1
+PUSH r1
+PUT 1 -> r2
+POP r1
+ADD r1, r2 -> r1
+PUT r1 -> r3
+PUT r3 -> m0
+PUT r3 -> r2
+PUT m1 -> r1
+PUSH r1
+PUT 1 -> r2
+POP r1
+ADD r1, r2 -> r1
+PUT r1 -> r3
+PUT r3 -> m1
+PUT r3 -> r2
+PUT BP -> r1
+ADD r1, 2 -> r1
+PUT *r1 -> r1
+PUSH r1
+PUT m1 -> r1
+PUT r1 -> r2
+POP r1
+ADD r1, r2 -> r1
+PUT *r1 -> r1
+PUT r1 -> r3
+PUT r3 -> m2
+PUT r3 -> r2
+JMP WHILE_START_1
+WHILE_END_2:
+POP BP
+RET
+FUNC_print_END:
+JMP FUNC_print_list_END
+FUNC_print_list_START:
+PUSH BP
+PUT SP -> BP
+PUT 97 -> r1
+PUT r1 -> m3
+WHILE_START_3:
+PUT BP -> r1
+ADD r1, 2 -> r1
+PUT *r1 -> r1
+PUSH r1
+PUT 0 -> r2
+POP r1
+SEQ r1, r2 -> r1
+SUB 1, r1 -> r1
+JZ r1 -> WHILE_END_4
+PUT m2 -> r1
+PUT r1 -> m4
+PUT m3 -> r1
+PUSH r1
+PUT 1 -> r2
+POP r1
+ADD r1, r2 -> r1
+PUT r1 -> r3
+PUT r3 -> m3
+PUT r3 -> r2
+PUT BP -> r1
+ADD r1, 2 -> r1
+PUT *r1 -> r1
+PUSH r1
+PUT 1 -> r2
+POP r1
+ADD r1, r2 -> r1
+PUT *r1 -> r1
+PUT r1 -> r3
+PUT BP -> r1
+ADD r1, 2 -> r1
+PUT r3 -> *r1
+PUT r3 -> r2
+JMP WHILE_START_3
+WHILE_END_4:
+POP BP
+RET
+FUNC_print_list_END:
+JMP FUNC_main_END
+FUNC_main_START:
+PUSH BP
+PUT SP -> BP
+PUT 0 -> r1
+PUT r1 -> m5
+PUT 0 -> r1
+PUT r1 -> m6
+PUT 49 -> r1
+PUT r1 -> m7
+PUT 0 -> r1
+PUT r1 -> m8
+PUT 50 -> r1
+PUT r1 -> m9
+PUT 0 -> r1
+PUT r1 -> m10
+PUT 9 -> r1
+PUSH r1
+PUT 7 -> r1
+PUSH r1
+PUT 1 -> r2
+POP r1
+POP r3
+ADD r1, r2 -> r1
+PUT r3 -> *r1
+PUT r3 -> r2
+PUT 51 -> r1
+PUT r1 -> m11
+PUT 0 -> r1
+PUT r1 -> m12
+PUT 11 -> r1
+PUSH r1
+PUT 9 -> r1
+PUSH r1
+PUT 1 -> r2
+POP r1
+POP r3
+ADD r1, r2 -> r1
+PUT r3 -> *r1
+PUT r3 -> r2
+PUT 7 -> r1
+PUSH r1
+PUT 5 -> r1
+PUSH r1
+PUT 0 -> r2
+POP r1
+POP r3
+ADD r1, r2 -> r1
+PUT r3 -> *r1
+PUT r3 -> r2
+PUT 11 -> r1
+PUSH r1
+PUT 5 -> r1
+PUSH r1
+PUT 1 -> r2
+POP r1
+POP r3
+ADD r1, r2 -> r1
+PUT r3 -> *r1
+PUT r3 -> r2
+PUT 5 -> r1
+PUSH r1
+PUT 0 -> r2
+POP r1
+ADD r1, r2 -> r1
+PUT *r1 -> r1
+PUSH r1
+CALL FUNC_print_list_START
+POP r2
+PUT r1 -> r2
+POP BP
+RET
+FUNC_main_END:
+CALL FUNC_main_START
+PUT r1 -> r2
+HLT
